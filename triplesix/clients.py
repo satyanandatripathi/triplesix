@@ -28,12 +28,12 @@ bot = Client(
 class Player:
     def __init__(self, pytgcalls: PyTgCalls):
         self.call = pytgcalls
-        self._client = {}
-        self._playlist: dict[int, list[dict[str, str]]] = {}
+        self.client = {}
+        self.playlist: dict[int, list[dict[str, str]]] = {}
 
     async def _stream(self, query: str, message: Message, url: str, y):
         chat_id = message.chat.id
-        playlist = self._playlist
+        playlist = self.playlist
         playlist[chat_id] = [{"query": query}]
         call = self.call
         await y.edit(get_message(chat_id, "stream").format(query))
@@ -42,11 +42,11 @@ class Player:
             AudioVideoPiped(url, MediumQualityAudio(), MediumQualityVideo()),
             stream_type=StreamType().pulse_stream,
         )
-        self._client[chat_id] = call
+        self.client[chat_id] = call
 
     async def _start_stream(self, query, message: Message):
         chat_id = message.chat.id
-        playlist = self._playlist
+        playlist = self.playlist
         if len(playlist) >= 1:
             try:
                 playlist[chat_id].extend([{"query": query}])
@@ -92,18 +92,18 @@ class Player:
         await self._start_stream(query, message)
 
     async def change_stream(self, message: Message):
-        playlist = self._playlist
-        client = self._client
+        playlist = self.playlist
+        client = self.client
         chat_id = message.chat.id
         if len(playlist[chat_id]) > 1:
             playlist[chat_id].pop(0)
             query = playlist[chat_id][0]['query']
             url = await get_youtube_stream(query)
             await asyncio.sleep(3)
-            await client[chat_id].join_group_call(
+            await client[chat_id].change_stream(
                 chat_id,
                 AudioVideoPiped(url, MediumQualityAudio(), MediumQualityVideo()),
-                stream_type=StreamType().pulse_stream,
+                stream_type=StreamType().pulse_stream
             )
             await asyncio.sleep(3)
             await message.reply(f"Skipped track, and playing {query}")
@@ -112,13 +112,13 @@ class Player:
 
     async def end_stream(self, message: Message):
         chat_id = message.chat.id
-        playlist = self._playlist
-        client = self._client
+        playlist = self.playlist
+        client = self.client
         try:
             try:
                 if client[chat_id].get_call(chat_id):
-                    await self.call.leave_group_call(chat_id)
-                    playlist[chat_id].clear()
+                    await client[chat_id].leave_group_call(chat_id)
+                    del playlist[chat_id]
                     await message.reply("ended")
             except KeyError:
                 await message.reply("you never streaming anything")
@@ -127,7 +127,7 @@ class Player:
 
     async def change_stream_status(self, status: str, message: Message):
         if status == "pause":
-            client = self._client
+            client = self.client
             chat_id = message.chat.id
             if client[chat_id].get_call(chat_id):
                 await client[chat_id].pause_stream(chat_id)
@@ -135,7 +135,7 @@ class Player:
                 return
             return
         elif status == "resume":
-            client = self._client
+            client = self.client
             chat_id = message.chat.id
             if client[chat_id].get_call(chat_id):
                 await client[chat_id].resume_stream(chat_id)
@@ -147,11 +147,11 @@ class Player:
 
     async def change_vol(self, message: Message):
         vol = int("".join(message.command[1]))
-        client = self._client
+        client = self.client
         chat_id = message.chat.id
         if client[chat_id].get_call(chat_id):
             await client[chat_id].change_volume_call(chat_id, vol)
             await message.reply(f"Volume changed to {vol}%")
-
+    
 
 player = Player(PyTgCalls(user))
