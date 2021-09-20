@@ -9,6 +9,7 @@ from pytgcalls import PyTgCalls, StreamType
 from pytgcalls.exceptions import NoActiveGroupCall, GroupCallNotFound
 from pytgcalls.types.input_stream import AudioVideoPiped
 from pytgcalls.types.input_stream.quality import MediumQualityAudio, MediumQualityVideo
+from pytgcalls.types import Update
 
 from dB import get_message
 from triplesix.configs import config
@@ -155,3 +156,22 @@ class Player:
     
 
 player = Player(PyTgCalls(user))
+@player.call.on_stream_end()
+async def stream_ended(pytgcalls: PyTgCalls, update: Update):
+    playlist = player.playlist
+    chat_id = update.chat_id
+    client = player.client
+    if len(playlist[chat_id]) > 1:
+        playlist[chat_id].pop(0)
+        query = playlist[chat_id][0]['query']
+        url = await get_youtube_stream(query)
+        await asyncio.sleep(3)
+        await client[chat_id].change_stream(
+            chat_id,
+            AudioVideoPiped(url, MediumQualityAudio(), MediumQualityVideo()),
+            stream_type=StreamType().pulse_stream
+        )
+        await asyncio.sleep(3)
+        return
+    await client.leave_group_call(chat_id)
+    await asyncio.sleep(5)
