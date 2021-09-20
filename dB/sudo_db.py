@@ -1,4 +1,5 @@
 import sqlite3 as sql
+from typing import Iterable
 
 conn = sql.connect("chat.db")
 cur = conn.cursor()
@@ -24,6 +25,6 @@ def del_sudo(chat_id: int, user_id: int):
     conn.commit()
 
 
-def get_sudos(chat_id: int) -> list:
+def get_sudos(chat_id: int) -> Iterable[int]:
     """Function for get all sudos in the chat"""
-    return [str(row[1]) for row in cur.execute(f"SELECT * FROM sudo_table WHERE chat_id = {chat_id}")]
+    return [row[1] for row in cur.execute(f"SELECT * FROM sudo_table WHERE chat_id = {chat_id}")]

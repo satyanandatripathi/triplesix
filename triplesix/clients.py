@@ -56,7 +56,7 @@ class Player:
                 return
             except KeyError:
                 await message.reply("restart the bot")
-                playlist[chat_id].clear()
+                del playlist[chat_id]
                 return
         y = await message.reply(get_message(chat_id, "process"))
         url = await get_youtube_stream(query)
@@ -79,10 +79,10 @@ class Player:
                 await y.edit(
                     f"{type(ex).__name__}: {ex.with_traceback(ex.__traceback__)}"
                 )
-                playlist[chat_id].clear()
+                del playlist[chat_id]
         except Exception as ex:
             await y.edit(f"{type(ex).__name__}: {ex.with_traceback(ex.__traceback__)}")
-            playlist[chat_id].clear()
+            del playlist[chat_id]
 
     async def start_stream(self, query: str, message: Message):
         await self._start_stream(query, message)
@@ -90,6 +90,25 @@ class Player:
     async def start_stream_via_callback(self, query: str, callback: CallbackQuery):
         message = callback.message
         await self._start_stream(query, message)
+
+    async def change_stream(self, message: Message):
+        playlist = self._playlist
+        client = self._client
+        chat_id = message.chat.id
+        if len(playlist[chat_id]) > 1:
+            playlist[chat_id].pop(0)
+            query = playlist[chat_id][0]['query']
+            url = await get_youtube_stream(query)
+            await asyncio.sleep(3)
+            await client[chat_id].join_group_call(
+                chat_id,
+                AudioVideoPiped(url, MediumQualityAudio(), MediumQualityVideo()),
+                stream_type=StreamType().pulse_stream,
+            )
+            await asyncio.sleep(3)
+            await message.reply(f"Skipped track, and playing {query}")
+            return
+        await message.reply("No playlist")
 
     async def end_stream(self, message: Message):
         chat_id = message.chat.id
@@ -106,11 +125,33 @@ class Player:
         except GroupCallNotFound:
             await message.reply("not streaming")
 
+    async def change_stream_status(self, status: str, message: Message):
+        if status == "pause":
+            client = self._client
+            chat_id = message.chat.id
+            if client[chat_id].get_call(chat_id):
+                await client[chat_id].pause_stream(chat_id)
+                await message.reply("Bot paused")
+                return
+            return
+        elif status == "resume":
+            client = self._client
+            chat_id = message.chat.id
+            if client[chat_id].get_call(chat_id):
+                await client[chat_id].resume_stream(chat_id)
+                await message.reply("Bot resume")
+                await asyncio.sleep(5)
+                await message.delete()
+                return
+            return
+
     async def change_vol(self, message: Message):
-        volume = int("".join(message.command[1]))
+        vol = int("".join(message.command[1]))
+        client = self._client
         chat_id = message.chat.id
-        await self._client[chat_id].change_volume_call(chat_id, volume)
-        await message.reply(f"Volume changed to {volume}%")
+        if client[chat_id].get_call(chat_id):
+            await client[chat_id].change_volume_call(chat_id, vol)
+            await message.reply(f"Volume changed to {vol}%")
 
 
 player = Player(PyTgCalls(user))

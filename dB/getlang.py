@@ -18,7 +18,4 @@ def get_message(chat_id: int, key: str):
     try:
         return langs[get(chat_id)[0][1]][key]
     except KeyError:
-        try:
-            return langs["id"][key]
-        except KeyError:
-            return f"Warning: \nCan't get the lang with key: {key}"
+        return f"Warning: \nCan't get the lang with key: {key}"
