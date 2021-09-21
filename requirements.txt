@@ -5,4 +5,4 @@ pafy==0.5.5
 youtube-dl==2021.6.6
 youtube-search==2.1.0
 TgCrypto
-py-tgcalls==0.8.1b12
+py-tgcalls==0.8.1b14
