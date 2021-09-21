@@ -53,6 +53,8 @@ async def stream_v2(_, message: Message):
         [
             list(inline_keyboard(query, user_id)),
             list(inline_keyboard2(query, user_id)),
-            InlineKeyboardButton("Close", "close")
+            [
+                InlineKeyboardButton("Close", "close")
+            ]
         ]
     ), disable_web_page_preview=True)
