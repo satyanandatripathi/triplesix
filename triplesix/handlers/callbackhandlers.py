@@ -5,12 +5,17 @@ from youtube_search import YoutubeSearch
 from triplesix.clients import player
 
 
+@Client.on_callback_query(filters.regex(pattern=r"close"))
+async def close_inline(_, cb: CallbackQuery):
+    await cb.message.delete()
+
+
 @Client.on_callback_query(filters.regex(pattern=r"stream"))
 async def play_callback(_, cb: CallbackQuery):
-    callback = cb.data.split(" ")[1]
-    x, query, user_id = callback.split("|")
-    x = int(x)
-    user_id = int(user_id)
+    callback = cb.data.split("|")
+    x = int(callback[0].split(" ")[1])
+    query = callback[1]
+    user_id = int(callback[2])
     if cb.from_user.id != user_id:
         await cb.answer("this is not for u.", show_alert=True)
         return

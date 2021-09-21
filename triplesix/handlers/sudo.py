@@ -9,7 +9,7 @@ from pyrogram.types import Message
 async def add_sudo_to_chat(_, message: Message):
     replied = message.reply_to_message
     chat_id = message.chat.id
-    entities = message.entities[1]
+    entities = message.entities[0]
     if not replied:
         if entities.type == "text_mention":
             sudo_id = entities.user.id

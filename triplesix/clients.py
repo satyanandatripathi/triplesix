@@ -103,8 +103,7 @@ class Player:
             await asyncio.sleep(3)
             await client[chat_id].change_stream(
                 chat_id,
-                AudioVideoPiped(url, MediumQualityAudio(), MediumQualityVideo()),
-                stream_type=StreamType().pulse_stream
+                AudioVideoPiped(url, MediumQualityAudio(), MediumQualityVideo())
             )
             await asyncio.sleep(3)
             await message.reply(f"Skipped track, and playing {query}")
@@ -156,6 +155,8 @@ class Player:
     
 
 player = Player(PyTgCalls(user))
+
+
 @player.call.on_stream_end()
 async def stream_ended(pytgcalls: PyTgCalls, update: Update):
     playlist = player.playlist
@@ -173,5 +174,5 @@ async def stream_ended(pytgcalls: PyTgCalls, update: Update):
         )
         await asyncio.sleep(3)
         return
-    await client.leave_group_call(chat_id)
+    await client[chat_id].leave_group_call(chat_id)
     await asyncio.sleep(5)
