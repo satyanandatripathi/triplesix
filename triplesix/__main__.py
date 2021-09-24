@@ -24,16 +24,14 @@ if not path.exists("downloads"):
     mkdir("downloads")
 
 
-async def get_username():
-    global bot_username
+async def get_username(botname=bot_username):
     x = await bot.get_me()
-    bot_username += x.username
+    botname += x.username
 
 
-async def get_client_username():
-    global client_username
+async def get_client_username(clientname=client_username):
     y = await user.get_me()
-    client_username += y.username
+    clientname += y.username
 
 
 player.call.start()
