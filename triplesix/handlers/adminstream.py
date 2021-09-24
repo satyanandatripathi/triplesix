@@ -37,4 +37,3 @@ async def end_stream(_, message: Message):
 @authorized_users_only
 async def skip_current_playing(_, message: Message):
     await player.change_stream(message)
-

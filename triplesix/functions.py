@@ -40,15 +40,9 @@ def authorized_users_only(func: Callable) -> Callable:
         if message.from_user.id in get_sudos(message.chat.id):
             return await func(client, message)
 
-        admins = await message.chat.get_members(filter="administrators")
-        for admin in admins:
-            if admin.user.id == message.from_user.id:
-                return await func(client, message)
-
         person = await message.chat.get_member(message.from_user.id)
-        if person.status == "creator":
+        if person.status == "creator" or person.status == "administrator":
             return await func(client, message)
-
     return wrapper
 
 

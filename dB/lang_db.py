@@ -25,8 +25,8 @@ def set_lang(chat_id: int, lang: str):
     cur.execute(
         f"""UPDATE chat_ids
     SET chat = {chat_id}, lang = '{lang}'
-    WHERE chat = {chat_id}"""
-    )
+    WHERE chat = {chat_id}
+    """)
     conn.commit()
 
 

@@ -134,7 +134,7 @@ class Player:
                 await message.reply("Bot paused")
                 return
             return
-        elif status == "resume":
+        if status == "resume":
             client = self.client
             chat_id = message.chat.id
             if client[chat_id].get_call(chat_id):

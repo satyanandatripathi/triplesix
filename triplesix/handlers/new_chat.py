@@ -28,8 +28,8 @@ async def on_bot_kicked(_, message: Message):
         members = message.left_chat_member
         if members.id == bot_id:
             del_chat(chat_id)
-            await user.send_message(chat_id, "Bot left from chat, assistant left this chat too")
+            await user.send_message(chat_id, "bot left from chat, assistant left this chat too")
             await asyncio.sleep(3)
             await user.leave_chat(chat_id)
     except Exception as e:
-        print(e)
+        await message.reply(f"{e}")

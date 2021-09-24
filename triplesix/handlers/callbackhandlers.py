@@ -7,6 +7,11 @@ from triplesix.clients import player
 
 @Client.on_callback_query(filters.regex(pattern=r"close"))
 async def close_inline(_, cb: CallbackQuery):
+    callback = cb.data.split("|")
+    user_id = int(callback[1])
+    if cb.from_user.id != user_id:
+        await cb.answer("this is not for you.", show_alert=True)
+        return
     await cb.message.delete()
 
 
