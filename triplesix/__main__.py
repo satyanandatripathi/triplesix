@@ -23,13 +23,18 @@ from triplesix import bot_username, client_username
 if not path.exists("downloads"):
     mkdir("downloads")
 
+botname = bot_username
+clientname = client_username
 
-async def get_username(botname=bot_username):
+
+async def get_username():
+    global botname
     x = await bot.get_me()
     botname += x.username
 
 
-async def get_client_username(clientname=client_username):
+async def get_client_username():
+    global clientname
     y = await user.get_me()
     clientname += y.username
 
