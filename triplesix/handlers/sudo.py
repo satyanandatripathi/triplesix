@@ -38,7 +38,7 @@ async def add_sudo_to_chat(_, message: Message):
                     f"{type(Ex).__name__}: {str(Ex.with_traceback(Ex.__traceback__))}"
                 )
             return
-        elif message.command[1].startswith("@"):
+        if message.command[1].startswith("@"):
             try:
                 username = message.command[1].split("@")[1]
                 user_id = (await message.chat.get_member(username)).user.id
@@ -49,7 +49,7 @@ async def add_sudo_to_chat(_, message: Message):
                     f"{type(e).__name__}: {e.with_traceback(e.__traceback__)}"
                 )
                 return
-        elif int(message.command[1]):
+        if int(message.command[1]):
             sudo_id = int(message.command[1])
             try:
                 add_sudo(chat_id, sudo_id)
@@ -88,7 +88,7 @@ async def del_sudo_from_chat(_, message: Message):
                     f"{type(Ex).__name__}: {str(Ex.with_traceback(Ex.__traceback__))}"
                 )
             return
-        elif message.command[1].startswith("@"):
+        if message.command[1].startswith("@"):
             try:
                 username = message.command[1].split("@")[1]
                 user_id = (await message.chat.get_member(username)).user.id
@@ -99,7 +99,8 @@ async def del_sudo_from_chat(_, message: Message):
                     f"{type(e).__name__}: {e.with_traceback(e.__traceback__)}"
                 )
                 return
-        elif int(message.command[1]):
+            return
+        if int(message.command[1]):
             sudo_id = int(message.command[1])
             try:
                 del_sudo(chat_id, sudo_id)
