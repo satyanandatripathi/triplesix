@@ -28,7 +28,6 @@ class Config:
     API_HASH = getenv("API_HASH")
     BOT_TOKEN = getenv("BOT_TOKEN")
     SESSION = getenv("SESSION")
-    ASSISTANT = getenv("ASSISTANT_USERNAME", "asistensixnine")
 
 
 config = Config()

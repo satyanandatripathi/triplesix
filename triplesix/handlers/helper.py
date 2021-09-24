@@ -1,9 +1,9 @@
 # Ported from github.com/levina-lab
+# with some change
 
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from triplesix import bot_username
-from triplesix.configs import config
+from triplesix import bot_username, client_username
 
 
 @Client.on_message(filters.command("start") & filters.private)
@@ -20,7 +20,7 @@ async def start_(_, message: Message):
 				],
 				[
 					InlineKeyboardButton(
-						"Dev", url=f"https://t.me/shohih_abdul2"),
+						"Dev", url="https://t.me/shohih_abdul2"),
 				]
 			]
 		)
@@ -33,7 +33,7 @@ async def help_(_, message: Message):
 		f"""❓ HOW TO USE THIS BOT:
 1.) first, add me to your group.
 2.) then promote me as admin and give all permissions except anonymous admin.
-3.) add @{config.ASSISTANT} to your group.
+3.) add @{client_username} to your group.
 4.) turn on the voice chat first before start to stream video.
 5.) type /stream (reply to video/give yt url) to start streaming.
 6.) type /end to end the video streaming.
