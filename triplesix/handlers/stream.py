@@ -27,7 +27,9 @@ def inline_keyboard(query: str, user_id: int):
     i = 0
     for j in range(3):
         i += 1
-        yield InlineKeyboardButton(f"{i}", callback_data=f"stream {j}|{query}|{user_id}")
+        yield InlineKeyboardButton(
+            f"{i}", callback_data=f"stream {j}|{query}|{user_id}"
+        )
 
 
 def inline_keyboard2(query: str, user_id: int):
@@ -36,7 +38,9 @@ def inline_keyboard2(query: str, user_id: int):
     for _ in range(2):
         i += 1
         j += 1
-        yield InlineKeyboardButton(f"{i}", callback_data=f"stream {j}|{query}|{user_id}")
+        yield InlineKeyboardButton(
+            f"{i}", callback_data=f"stream {j}|{query}|{user_id}"
+        )
 
 
 @Client.on_message(command("stream"))
@@ -47,9 +51,13 @@ async def start_stream(_, message: Message):
         await player.start_stream(query, message)
     elif reply:
         if reply.video or reply.document:
-            await message.reply("This feature is under development, contact @shohih_abdul2 for more information")
+            await message.reply(
+                "This feature is under development, contact @shohih_abdul2 for more information"
+            )
         else:
-            await message.reply("Reply to video or document.\nNote: This feature is under development")
+            await message.reply(
+                "Reply to video or document.\nNote: This feature is under development"
+            )
     else:
         await message.reply("Pass the query after /stream command!")
 
@@ -66,12 +74,14 @@ async def stream_v2(_, message: Message):
         rez += f"{j}. [{res[i]['title'][:35]}...](https://youtube.com{res[i]['url_suffix']})\n"
         rez += f"Duration - {res[i]['duration']}\n"
         i += 1
-    await message.reply(rez, reply_markup=InlineKeyboardMarkup(
-        [
-            list(inline_keyboard(query, user_id)),
-            list(inline_keyboard2(query, user_id)),
+    await message.reply(
+        rez,
+        reply_markup=InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("Close", f"close|{user_id}")
+                list(inline_keyboard(query, user_id)),
+                list(inline_keyboard2(query, user_id)),
+                [InlineKeyboardButton("Close", f"close|{user_id}")],
             ]
-        ]
-    ), disable_web_page_preview=True)
+        ),
+        disable_web_page_preview=True,
+    )
