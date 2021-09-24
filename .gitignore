@@ -1,6 +1,7 @@
 chat.db
 test.py
 triplesix/session.session
+triplesix/session.session-journal
 __pycache__
 triplesix/__pycache__
 dB/__pycache__
