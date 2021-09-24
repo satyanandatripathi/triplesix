@@ -3,11 +3,12 @@
 
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from triplesix import bot_username, client_username
+from triplesix.clients import bot, user
 
 
 @Client.on_message(filters.command("start") & filters.private)
 async def start_(_, message: Message):
+	bot_username = (await bot.get_me()).username
 	await message.reply_text(
 		f"""<b>✨ **Welcome {message.from_user.mention()}** \n
 		💭 **I'm a video streamer bot, i can streaming video from youtube trough the telegram group video chat !**
@@ -30,6 +31,7 @@ async def start_(_, message: Message):
 @Client.on_message(filters.command("help") & filters.group)
 async def help_(_, message: Message):
 	user_id = message.from_user.id
+	client_username = (await user.get_me()).username
 	await message.reply_text(
 		f"""❓ HOW TO USE THIS BOT:
 1.) first, add me to your group.
