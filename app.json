@@ -20,6 +20,10 @@
     "BOT_TOKEN": {
       "description": "fill it with bot token from botfather",
       "required": true
+    },
+    "ASSISTANT": {
+      "description": "fill it with your assistant username (without @)",
+      "required": false
     }
   },
   "buildpacks": [

@@ -58,7 +58,7 @@ Easy way to host this bot
 - pip3 install -U -r requirements.txt
 - cp -r sample.env local.env
 - nano local.env #Fill it with your variables value.
-- python3 -m bot
+- python3 -m triplesix
 ```
 
 # Special Credits 💖
