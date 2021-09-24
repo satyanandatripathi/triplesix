@@ -18,7 +18,7 @@
 from pyrogram import Client
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
-from triplesix.functions import command, authorized_users_only
+from triplesix.functions import command
 from triplesix.clients import player
 from youtube_search import YoutubeSearch
 

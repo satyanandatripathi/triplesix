@@ -28,6 +28,8 @@ class Config:
     API_HASH = getenv("API_HASH")
     BOT_TOKEN = getenv("BOT_TOKEN")
     SESSION = getenv("SESSION")
+    GROUP_URL = getenv("GROUP_URL", "https://t.me/sixninesupport")
+    CHANNEL_URL = getenv("CHANNEL_URL", "https://t.me/sixnineproject")
 
 
 config = Config()

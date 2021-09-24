@@ -26,10 +26,15 @@ from triplesix.clients import player
 async def close_inline(_, cb: CallbackQuery):
     callback = cb.data.split("|")
     user_id = int(callback[1])
+    message = cb.message
     if cb.from_user.id != user_id:
         await cb.answer("this is not for you.", show_alert=True)
         return
-    await cb.message.delete()
+    person = await message.chat.get_member(message.from_user.id)
+    if person.status in ("creator", "administrator"):
+        await message.delete()
+        return
+    await message.delete()
 
 
 @Client.on_callback_query(filters.regex(pattern=r"stream"))

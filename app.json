@@ -20,6 +20,14 @@
     "BOT_TOKEN": {
       "description": "fill it with bot token from botfather",
       "required": true
+    },
+    "GROUP_URL": {
+      "description": "fill it with your group link, ex t.me/sixninesupport",
+      "required": false
+    },
+    "CHANNEL_URL": {
+      "description": "fill it with your channel link, ex t.me/sixnineproject",
+      "required": false
     }
   },
   "buildpacks": [

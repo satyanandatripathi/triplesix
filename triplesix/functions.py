@@ -58,7 +58,7 @@ def authorized_users_only(func: Callable) -> Callable:
             return await func(client, message)
 
         person = await message.chat.get_member(message.from_user.id)
-        if person.status == "creator" or person.status == "administrator":
+        if person.status in ("creator", "administrator"):
             return await func(client, message)
     return wrapper
 
