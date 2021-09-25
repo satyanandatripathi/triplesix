@@ -20,7 +20,12 @@ from pyrogram.types import CallbackQuery
 from youtube_search import YoutubeSearch
 
 from triplesix.clients import player
-from triplesix.handlers.stream import InlineKeyboardButton, InlineKeyboardMarkup, inline_keyboard, inline_keyboard2
+from triplesix.handlers.stream import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    inline_keyboard,
+    inline_keyboard2,
+)
 
 
 @Client.on_callback_query(filters.regex(pattern=r"close"))
@@ -70,12 +75,14 @@ async def next_callback(_, cb: CallbackQuery):
         res = YoutubeSearch(query, 5).to_dict()
         rez += f"|- {i}. [{res[j]['title'][:35]}...](https://youtube.com{res[j]['url_suffix']})\n"
         rez += f"|- Duration - {res[j]['duration']}\n"
-    await message.edit(f"Results\n{rez}\n|- Owner @shohih_abdul2", reply_markup=InlineKeyboardMarkup(
-        [
-            list(inline_keyboard(query, user_id)),
-            list(inline_keyboard2(query, user_id)),
+    await message.edit(
+        f"Results\n{rez}\n|- Owner @shohih_abdul2",
+        reply_markup=InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("Close", f"close|{user_id}")
+                list(inline_keyboard(query, user_id)),
+                list(inline_keyboard2(query, user_id)),
+                [InlineKeyboardButton("Close", f"close|{user_id}")],
             ]
-        ]
-    ), disable_web_page_preview=True)
+        ),
+        disable_web_page_preview=True,
+    )
