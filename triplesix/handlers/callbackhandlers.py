@@ -67,7 +67,7 @@ async def next_callback(_, cb: CallbackQuery):
     for _ in range(5):
         i += 1
         j += 1
-        res = YoutubeSearch(query, 5).to_dict()
+        res = YoutubeSearch(query, 10).to_dict()
         rez += f"|- {i}. [{res[j]['title'][:35]}...](https://youtube.com{res[j]['url_suffix']})\n"
         rez += f"|- Duration - {res[j]['duration']}\n"
     await message.edit(f"Results\n{rez}\n|- Owner @shohih_abdul2", reply_markup=InlineKeyboardMarkup(
