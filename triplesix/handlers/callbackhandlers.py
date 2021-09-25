@@ -20,7 +20,25 @@ from pyrogram.types import CallbackQuery
 from youtube_search import YoutubeSearch
 
 from triplesix.clients import player
-from triplesix.handlers.stream import InlineKeyboardButton, InlineKeyboardMarkup, inline_keyboard, inline_keyboard2
+from triplesix.handlers.stream import InlineKeyboardButton, InlineKeyboardMarkup
+
+
+def inline_keyboard(query: str, user_id: int):
+    i = 5
+    j = 3
+    for _ in range(3):
+        i += 1
+        j += 1
+        yield InlineKeyboardButton(f"{i}", callback_data=f"stream {j}|{query}|{user_id}")
+
+
+def inline_keyboard2(query: str, user_id: int):
+    i = 8
+    j = 5
+    for _ in range(2):
+        i += 1
+        j += 1
+        yield InlineKeyboardButton(f"{i}", callback_data=f"stream {j}|{query}|{user_id}")
 
 
 @Client.on_callback_query(filters.regex(pattern=r"close"))
@@ -62,7 +80,7 @@ async def next_callback(_, cb: CallbackQuery):
         await cb.answer("this is not for u.", show_alert=True)
         return
     rez = "\n"
-    i = 4
+    i = 5
     j = 3
     for _ in range(5):
         i += 1
