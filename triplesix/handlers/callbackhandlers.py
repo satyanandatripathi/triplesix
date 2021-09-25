@@ -81,7 +81,7 @@ async def next_callback(_, cb: CallbackQuery):
         return
     rez = "\n"
     i = 5
-    j = 3
+    j = 4
     for _ in range(5):
         i += 1
         j += 1
