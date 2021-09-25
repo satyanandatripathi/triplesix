@@ -25,7 +25,7 @@ from triplesix.handlers.stream import InlineKeyboardButton, InlineKeyboardMarkup
 
 def inline_keyboard(query: str, user_id: int):
     i = 5
-    j = 3
+    j = 4
     for _ in range(3):
         i += 1
         j += 1
@@ -34,7 +34,7 @@ def inline_keyboard(query: str, user_id: int):
 
 def inline_keyboard2(query: str, user_id: int):
     i = 8
-    j = 5
+    j = 7
     for _ in range(2):
         i += 1
         j += 1
