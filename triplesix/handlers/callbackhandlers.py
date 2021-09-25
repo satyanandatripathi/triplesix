@@ -29,7 +29,9 @@ def inline_keyboard(query: str, user_id: int):
     for _ in range(3):
         i += 1
         j += 1
-        yield InlineKeyboardButton(f"{i}", callback_data=f"stream {j}|{query}|{user_id}")
+        yield InlineKeyboardButton(
+            f"{i}", callback_data=f"stream {j}|{query}|{user_id}"
+        )
 
 
 def inline_keyboard2(query: str, user_id: int):
@@ -38,7 +40,9 @@ def inline_keyboard2(query: str, user_id: int):
     for _ in range(2):
         i += 1
         j += 1
-        yield InlineKeyboardButton(f"{i}", callback_data=f"stream {j}|{query}|{user_id}")
+        yield InlineKeyboardButton(
+            f"{i}", callback_data=f"stream {j}|{query}|{user_id}"
+        )
 
 
 @Client.on_callback_query(filters.regex(pattern=r"close"))
@@ -88,12 +92,14 @@ async def next_callback(_, cb: CallbackQuery):
         res = YoutubeSearch(query, 10).to_dict()
         rez += f"|- {i}. [{res[j]['title'][:35]}...](https://youtube.com{res[j]['url_suffix']})\n"
         rez += f"|- Duration - {res[j]['duration']}\n"
-    await message.edit(f"Results\n{rez}\n|- Owner @shohih_abdul2", reply_markup=InlineKeyboardMarkup(
-        [
-            list(inline_keyboard(query, user_id)),
-            list(inline_keyboard2(query, user_id)),
+    await message.edit(
+        f"Results\n{rez}\n|- Owner @shohih_abdul2",
+        reply_markup=InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("Close", f"close|{user_id}")
+                list(inline_keyboard(query, user_id)),
+                list(inline_keyboard2(query, user_id)),
+                [InlineKeyboardButton("Close", f"close|{user_id}")],
             ]
-        ]
-    ), disable_web_page_preview=True)
+        ),
+        disable_web_page_preview=True,
+    )
