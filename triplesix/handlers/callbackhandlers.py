@@ -20,6 +20,7 @@ from pyrogram.types import CallbackQuery
 from youtube_search import YoutubeSearch
 
 from triplesix.clients import player
+from triplesix.handlers.stream import InlineKeyboardButton, InlineKeyboardMarkup, inline_keyboard, inline_keyboard2
 
 
 @Client.on_callback_query(filters.regex(pattern=r"close"))
@@ -49,3 +50,32 @@ async def play_callback(_, cb: CallbackQuery):
     res = YoutubeSearch(query, 5).to_dict()
     title = res[x]["title"]
     await player.start_stream_via_callback(title, cb)
+
+
+@Client.on_callback_query(filters.regex(pattern=r"next"))
+async def next_callback(_, cb: CallbackQuery):
+    message = cb.message
+    callback = cb.data.split("|")
+    query = callback[1]
+    user_id = int(callback[2])
+    if cb.from_user.id != user_id:
+        await cb.answer("this is not for u.", show_alert=True)
+        return
+    rez = "\n"
+    i = 4
+    j = 3
+    for _ in range(5):
+        i += 1
+        j += 1
+        res = YoutubeSearch(query, 5).to_dict()
+        rez += f"|- {i}. [{res[j]['title'][:35]}...](https://youtube.com{res[j]['url_suffix']})\n"
+        rez += f"|- Duration - {res[j]['duration']}\n"
+    await message.edit(f"Results\n{rez}\n|- Owner @shohih_abdul2", reply_markup=InlineKeyboardMarkup(
+        [
+            list(inline_keyboard(query, user_id)),
+            list(inline_keyboard2(query, user_id)),
+            [
+                InlineKeyboardButton("Close", f"close|{user_id}")
+            ]
+        ]
+    ), disable_web_page_preview=True)

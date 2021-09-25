@@ -63,13 +63,16 @@ async def stream_v2(_, message: Message):
     for i in range(5):
         j += 1
         res = YoutubeSearch(query, 5).to_dict()
-        rez += f"{j}. [{res[i]['title'][:35]}...](https://youtube.com{res[i]['url_suffix']})\n"
-        rez += f"Duration - {res[i]['duration']}\n"
+        rez += f"|- {j}. [{res[i]['title'][:35]}...](https://youtube.com{res[i]['url_suffix']})\n"
+        rez += f"|- Duration - {res[i]['duration']}\n"
         i += 1
-    await message.reply(rez, reply_markup=InlineKeyboardMarkup(
+    await message.reply(f"Results\n{rez}\n|- Owner @shohih_abdul2", reply_markup=InlineKeyboardMarkup(
         [
             list(inline_keyboard(query, user_id)),
             list(inline_keyboard2(query, user_id)),
+            [
+              InlineKeyboardButton("Next", f"next|{query}|{user_id}")
+            ],
             [
                 InlineKeyboardButton("Close", f"close|{user_id}")
             ]
