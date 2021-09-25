@@ -65,7 +65,7 @@ async def play_callback(_, cb: CallbackQuery):
     if cb.from_user.id != user_id:
         await cb.answer("this is not for u.", show_alert=True)
         return
-    res = YoutubeSearch(query, 5).to_dict()
+    res = YoutubeSearch(query, 10).to_dict()
     title = res[x]["title"]
     await player.start_stream_via_callback(title, cb)
 
