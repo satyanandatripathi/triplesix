@@ -20,7 +20,8 @@ from dotenv import load_dotenv
 
 if path.exists("local.env"):
     load_dotenv("local.env")
-load_dotenv()
+else: 
+    load_dotenv()
 
 
 class Config:
